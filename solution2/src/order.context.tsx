@@ -1,6 +1,7 @@
 import React from "react";
 import * as api from "./api";
 import { Order, Product, createEmptyOrder } from "./order.vm";
+import { useToasts } from "react-toast-notifications";
 
 interface Context {
   order: Order;
@@ -16,6 +17,7 @@ export const OrderContext = React.createContext<Context>(null);
 
 export const OrderProvider: React.FunctionComponent = ({ children }) => {
   const [order, setOrder] = React.useState<Order>(createEmptyOrder());
+  const { addToast } = useToasts();
 
   React.useEffect(() => {
     api.getOrder().then((order) => {
@@ -33,7 +35,7 @@ export const OrderProvider: React.FunctionComponent = ({ children }) => {
 
   const handleSend = () => {
     if (isValid()) {
-      alert("Pedido enviado");
+      addToast("Pedido enviado", { appearance: "success" });
     }
   };
 
