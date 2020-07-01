@@ -1,0 +1,15 @@
+.root {
+  display: flex;
+  flex-direction: column;
+
+  .data-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .button-container {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+}
