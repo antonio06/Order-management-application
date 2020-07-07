@@ -1,24 +1,17 @@
 import React from "react";
-import { Order } from "order.vm";
+import { OrderContext } from "../order.context";
 const classes = require("./header.styles.scss");
 
-interface Props {
-  order: Order;
-  totalAmount: number;
-  isValid: boolean;
-  onSend: () => void;
-  onValid: () => void;
-  onInvalid: () => void;
-}
+export const HeaderComponent: React.FunctionComponent = () => {
+  const {
+    order,
+    isValid,
+    onSend,
+    onValid,
+    onInvalid,
+    totalAmount,
+  } = React.useContext(OrderContext);
 
-export const HeaderComponent: React.FunctionComponent<Props> = ({
-  order,
-  totalAmount,
-  isValid,
-  onSend,
-  onValid,
-  onInvalid,
-}) => {
   return (
     <div className={classes.root}>
       <div className={classes.dataHeader}>

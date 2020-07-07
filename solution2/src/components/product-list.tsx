@@ -1,16 +1,9 @@
 import React from "react";
 import { ProductRowComponent } from "./product-row.component";
-import { Product } from "order.vm";
+import { OrderContext } from "../order.context";
 
-interface Props {
-  products: Product[];
-  onChangeProduct: (product: Product) => void;
-}
-
-export const ProductListComponent: React.FunctionComponent<Props> = ({
-  products,
-  onChangeProduct,
-}) => {
+export const ProductListComponent: React.FunctionComponent = () => {
+  const { order, onChangeProduct } = React.useContext(OrderContext);
   return (
     <table>
       <thead>
@@ -22,7 +15,7 @@ export const ProductListComponent: React.FunctionComponent<Props> = ({
         </tr>
       </thead>
       <tbody>
-        {products.map((product) => (
+        {order.products.map((product) => (
           <ProductRowComponent
             key={product.id}
             product={product}
