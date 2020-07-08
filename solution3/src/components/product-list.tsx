@@ -1,15 +1,15 @@
 import React from "react";
 import { ProductRowComponent } from "./product-row.component";
-import { Product } from "order.vm";
+import { Product, Action } from "../order.vm";
 
 interface Props {
   products: Product[];
-  onChangeProduct: (product: Product) => void;
+  dispatch: React.Dispatch<Action>;
 }
 
 export const ProductListComponent: React.FunctionComponent<Props> = ({
   products,
-  onChangeProduct,
+  dispatch,
 }) => {
   return (
     <table>
@@ -26,7 +26,7 @@ export const ProductListComponent: React.FunctionComponent<Props> = ({
           <ProductRowComponent
             key={product.id}
             product={product}
-            onChangeProduct={onChangeProduct}
+            dispatch={dispatch}
           />
         ))}
       </tbody>

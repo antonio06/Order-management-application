@@ -1,14 +1,14 @@
 import React from "react";
-import { Product } from "order.vm";
+import { Product, Action, actionIds } from "../order.vm";
 
 interface Props {
   product: Product;
-  onChangeProduct: (product: Product) => void;
+  dispatch: React.Dispatch<Action>;
 }
 
 export const ProductRowComponent: React.FunctionComponent<Props> = ({
   product,
-  onChangeProduct,
+  dispatch,
 }) => {
   return (
     <tr>
@@ -17,9 +17,12 @@ export const ProductRowComponent: React.FunctionComponent<Props> = ({
           type="checkbox"
           checked={product.isChecked}
           onChange={(event) =>
-            onChangeProduct({
-              ...product,
-              isChecked: event.target.checked,
+            dispatch({
+              type: actionIds.setProducts,
+              payload: {
+                ...product,
+                isChecked: event.target.checked,
+              },
             })
           }
         />
@@ -31,11 +34,14 @@ export const ProductRowComponent: React.FunctionComponent<Props> = ({
           name="amount"
           value={product.amount}
           onChange={(event) =>
-            onChangeProduct({
-              ...product,
-              amount: Boolean(event.target.value)
-                ? parseFloat(event.target.value)
-                : 0.0,
+            dispatch({
+              type: actionIds.setProducts,
+              payload: {
+                ...product,
+                amount: Boolean(event.target.value)
+                  ? parseFloat(event.target.value)
+                  : 0.0,
+              },
             })
           }
         />

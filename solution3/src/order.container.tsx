@@ -1,16 +1,42 @@
 import React from "react";
 import { OrderComponent } from "./order.component";
 import * as api from "./api";
-import { Order, createEmptyOrder, Product } from "./order.vm";
+import {
+  Order,
+  createEmptyOrder,
+  Product,
+  Action,
+  actionIds,
+} from "./order.vm";
 import { useToasts } from "react-toast-notifications";
 
 export const OrderContainer: React.FunctionComponent = () => {
-  const [order, setOrder] = React.useState<Order>(createEmptyOrder());
+  const orderReducer = (order: Order, action: Action): Order => {
+    switch (action.type) {
+      case actionIds.setOrder:
+        return {
+          ...action.payload,
+        };
+      case actionIds.setProducts:
+        const mappedProduct = order.products.map((p) =>
+          action.payload.id === p.id ? action.payload : p
+        );
+        return {
+          ...order,
+          products: mappedProduct,
+        };
+      default:
+        return order;
+    }
+  };
+
+  const [order, dispatch] = React.useReducer(orderReducer, createEmptyOrder());
+
   const { addToast } = useToasts();
 
   React.useEffect(() => {
     api.getOrder().then((order) => {
-      setOrder(order);
+      dispatch({ type: actionIds.setOrder, payload: order });
     });
   }, []);
 
@@ -38,7 +64,10 @@ export const OrderContainer: React.FunctionComponent = () => {
       p.isChecked && !p.isValid ? setIsValidProduct(p, true) : p
     );
 
-    setOrder({ ...order, products: mappedProducts });
+    dispatch({
+      type: actionIds.setOrder,
+      payload: { ...order, products: mappedProducts },
+    });
   };
 
   const handleInvalid = () => {
@@ -46,14 +75,10 @@ export const OrderContainer: React.FunctionComponent = () => {
       p.isChecked ? setIsValidProduct(p, false) : p
     );
 
-    setOrder({ ...order, products: mappedProducts });
-  };
-
-  const handleChangeProduct = (product: Product) => {
-    const mappedProduct = order.products.map((p) =>
-      product.id === p.id ? product : p
-    );
-    setOrder({ ...order, products: mappedProduct });
+    dispatch({
+      type: actionIds.setOrder,
+      payload: { ...order, products: mappedProducts },
+    });
   };
 
   return (
@@ -64,7 +89,7 @@ export const OrderContainer: React.FunctionComponent = () => {
       onSend={handleSend}
       onValid={handleValid}
       onInvalid={handleInvalid}
-      onChangeProduct={handleChangeProduct}
+      dispatch={dispatch}
     />
   );
 };

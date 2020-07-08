@@ -1,6 +1,6 @@
 import React from "react";
 import { HeaderComponent, ProductListComponent } from "./components";
-import { Order, Product } from "order.vm";
+import { Order, Action } from "./order.vm";
 
 interface Props {
   order: Order;
@@ -9,7 +9,7 @@ interface Props {
   onSend: () => void;
   onValid: () => void;
   onInvalid: () => void;
-  onChangeProduct: (product: Product) => void;
+  dispatch: React.Dispatch<Action>;
 }
 
 export const OrderComponent: React.FunctionComponent<Props> = ({
@@ -19,7 +19,7 @@ export const OrderComponent: React.FunctionComponent<Props> = ({
   onSend,
   onValid,
   onInvalid,
-  onChangeProduct,
+  dispatch,
 }) => {
   return (
     <>
@@ -31,10 +31,7 @@ export const OrderComponent: React.FunctionComponent<Props> = ({
         onValid={onValid}
         onInvalid={onInvalid}
       />
-      <ProductListComponent
-        products={order.products}
-        onChangeProduct={onChangeProduct}
-      />
+      <ProductListComponent products={order.products} dispatch={dispatch} />
     </>
   );
 };
